@@ -192,6 +192,9 @@ export default {
         }
     },
     mounted(){
+        this.$fetch("https://www.eecup.cn/chaomes/cms/goods/findInfo?id=1").then((res) => {
+            console.log(res)
+        })
     }
 }
 </script>
