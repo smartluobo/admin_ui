@@ -10,7 +10,7 @@
 				<el-button size="small" icon="el-icon-refresh" class="blue">刷新</el-button>
 			</div>
 		</div>
-    <el-divider class="mg-t-10"></el-divider>
+    <el-divider class="el-divider-margin"></el-divider>
     <div class="pd-30" v-loading="loading">
         <div class="fontN">
           <el-button type="primary" size="small">添加产品</el-button>
@@ -78,6 +78,6 @@
   }
 
 </script>
-<style scoped>
-
+<style rel="stylesheet" scoped>
+@import '../../../../assets/css/common.css'; /*引入公共样式*/
 </style>

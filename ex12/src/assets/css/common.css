@@ -1,0 +1,9 @@
+.el-divider-margin{
+margin: 0!important;
+}
+.fontN{
+margin-top: -10px;
+}
+.fontN .el-table{
+margin-top: 10px;
+}
