@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import App from './App';
+import store from './store';//引入store
 import ElementUI from 'element-ui';
 import { Loading } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -32,6 +33,7 @@ Vue.prototype.$patch=patch;
 Vue.prototype.$put=put
 Vue.prototype.$WebSocketConnect=WebSocketConnect
 Vue.prototype.$pagingArr=[10, 20, 30, 50, 100]
+Vue.prototype.$urlHost = "https://www.eecup.cn"
 
 Vue.use(ElementUI);
 Vue.config.productionTip = false
@@ -40,6 +42,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

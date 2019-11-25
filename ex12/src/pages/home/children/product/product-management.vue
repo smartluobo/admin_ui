@@ -7,36 +7,42 @@
 				</div>
 			</div>
 			<div class="pd-r-20">
-				<el-button size="small" icon="el-icon-refresh" class="blue">刷新</el-button>
+				<el-button size="small" icon="el-icon-refresh" class="blue" @click="refreshFn">刷新</el-button>
 			</div>
 		</div>
-    <el-divider class="mg-t-10"></el-divider>
+    <el-divider class="el-divider-margin"></el-divider>
     <div class="pd-30" v-loading="loading">
         <div class="fontN">
-          <el-button type="primary" size="small" @click="dialogFormVisible = true">添加产品</el-button>
-          <el-button type="primary" size="small">设置上架</el-button>
-          <el-button type="primary" size="small">删除产品</el-button>
-					<el-table :data="listData" border style="width: 100%">
-            <el-table-column type="selection" width="55">
+          <el-button type="primary" size="small" @click="addProduct">添加产品</el-button>
+          <el-button type="primary" size="small" @click="deleteProduct">删除产品</el-button>
+					<el-table :data="listData" border style="width: 100%" 
+          @selection-change="handleSelectionChange"
+          @cell-click="cellClick">
+            <el-table-column type="selection" fixed width="55">
             </el-table-column>
             <el-table-column fixed label="操作" width="100">
               <template slot-scope="scope">
-                <el-button type="text" size="small">编辑</el-button>
+                <el-button type="text" size="small" 
+                @click.native.prevent="modifyRow(scope.$index, listData)">编辑</el-button>
               </template>
             </el-table-column>
-						<el-table-column prop="id" label="产品名称">
+						<el-table-column prop="goodsName" label="产品名称">
 						</el-table-column>
-						<el-table-column prop="nickname" label="分类名称">
-							<template slot-scope="scope"><span>{{ scope.row.nickname }}</span></template>
+						<el-table-column prop="goodsPrice" label="产品价格">
 						</el-table-column>
-						<el-table-column prop="mobile" label="录入时间">
+						<el-table-column prop="goodsPoster" label="产品图片">
+              <template slot-scope="scope">
+                <img :src="scope.row.goodsPoster" alt="" class="goodsPosterImg" />
+              </template>
 						</el-table-column>
-						<el-table-column prop="mobile" label="上架">
+						<el-table-column prop="goodsStatus" label="上架状态">
+              <template slot-scope="scope">
+                <span :class='scope.row.goodsStatus == "0" ? "green" : "red"'>{{scope.row.goodsStatus == "0" ? "√" : "×"}}</span>
+              </template>
 						</el-table-column>
-						<el-table-column prop="mobile" label="标签">
+						<el-table-column prop="createTime" label="录入时间">
 						</el-table-column>
-						<el-table-column prop="zhimacreditstate" label="备注">
-							<template slot-scope="scope">{{ scope.row.zhimacreditstate == 2 ? '授权通过' : (scope.row.zhimacreditstate == 1 ? '授权中' : '未授权') }}</template>
+						<el-table-column prop="updateTime" label="更新时间">
 						</el-table-column>
 					</el-table>
 				</div>
@@ -45,99 +51,140 @@
       <el-pagination @size-change="handleSizeChange" :current-page="currentpage" @current-change="handleCurrentChange" :page-sizes="$pagingArr" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total_count">
       </el-pagination>
     </div>
-    <el-dialog title="添加产品" :visible.sync="dialogFormVisible">
-        <el-tabs tab-position="left" >
-        <el-tab-pane label="基本信息">
-          <el-form :model="form">
-            <el-form-item label="产品名称" :label-width="formLabelWidth">
-              <el-input v-model="form.name" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="产品图片" :label-width="formLabelWidth">
-              <el-upload
-                class="upload-demo"
-                ref="upload"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :file-list="fileList"
-                :auto-upload="false">
-                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
-              </el-upload>
-            </el-form-item>
-            <el-form-item label="活动区域" :label-width="formLabelWidth">
-              <el-select v-model="form.region" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-        <el-tab-pane label="详细介绍">
-          
-        </el-tab-pane>
-      </el-tabs>
-      
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>
+    <AddProduct @addProductResult="addProductResult" v-if="addFlag"></AddProduct>
   </div>
 </template>
 
 <script>
+  import AddProduct from "@/pages/home/children/product/addProduct"
   export default {
+    components: {
+      AddProduct
+    },
     data () {
       return {
         loading: false,
+        addFlag: false,
         pagesize: 10,
-				listData:[],
         currentpage: 1,
         total_count: 10,
-        dialogFormVisible: false,
-        formLabelWidth: '120px',
-         form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        },
-        fileList: []
+				listData:[],
+        selectedLists: []//已勾选
       };
     },
     methods: {
+      refreshFn(){
+        this.getLists();
+      },
+      addProduct(){
+        this.addFlag = true;
+        this.$store.dispatch('updateProInfo', {"id": ""});
+      },
+      addProductResult(obj){
+        console.log(obj);
+        if(obj.status != "fail"){
+          this.addFlag = false;
+        }
+      },
+      deleteProduct(){
+        //获取勾选项
+        var lists = this.selectedLists;
+        var $that = this;
+        for(var i=0;i<lists.length;i++){
+          (function(i){
+            var item = lists[i];
+            var url = $that.$urlHost+"/chaomes/cms/goods/delete?id="+item.id;
+            $that.$post(url,{}).then((res) => {
+              if(res.code=="200" && res.msg == "success"){
+                $that.$message({
+                  message: "删除成功！",
+                  type: 'success'
+                });
+                $that.getLists();
+              }else{
+                $that.$alert('删除失败：'+res.msg, '提示', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                    this.$message({
+                      type: 'error'
+                    });
+                  }
+                });
+              }
+            })
+          })(i)
+        }
+      },
+      handleSelectionChange(val){
+        this.selectedLists = val;
+      },
+      cellClick(row, column, cell, event){
+        if(column.property == "goodsStatus"){
+          var $that = this;
+          var url = $that.$urlHost+"/chaomes/cms/goods/update";
+          $that.$post(url,{id:row.id}).then((res) => {
+            if(res.code=="200" && res.msg == "success"){
+              $that.$message({
+                message: "更新成功！",
+                type: 'success'
+              });
+              $that.getLists();
+            }else{
+              $that.$alert('更新失败：'+res.msg, '提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                  this.$message({
+                    type: 'error'
+                  });
+                }
+              });
+            }
+          })
+        }
+      },
       handleCurrentChange(val) {
 				let that = this
 				that.currentpage = val
-				that.requestList()
+				that.refreshFn()
       },
       handleSizeChange(val) {
 				let that = this
 				that.pagesize = val
 				that.currentpage = 1
-				that.requestList()
+				that.refreshFn()
       },
-      requestList(){
-        return
+      getLists(){
+          var $that = this;
+          var url = this.$urlHost+"/chaomes/cms/goods/findPage?pageNum="+
+          $that.currentpage+"&pageSize="+$that.pagesize;
+          var params = {
+            goodsName: ''
+          };
+          this.$post(url,params).then((res) => {
+            if(res.list){
+                $that.listData = res.list;
+            }else{
+              $that.$alert(res.msg, '提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                  this.$message({
+                    type: 'error'
+                  });
+                }
+              });
+            }
+          })
       },
-      submitUpload() {
-        this.$refs.upload.submit();
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
+      modifyRow(i,lists){
+        this.$store.dispatch('updateProInfo', {"id": lists[i]["id"]});
+        this.addFlag = true;
       }
+    },
+    mounted(){
+      this.getLists();
     }
   }
-
 </script>
-<style scoped>
-
+<style rel="stylesheet" scoped>
+@import '../../../../assets/css/common.css'; /*引入公共样式*/
 </style>

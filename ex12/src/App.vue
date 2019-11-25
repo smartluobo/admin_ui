@@ -507,7 +507,7 @@ color:rgba(51,51,51,1)
 		text-align: center;
 	}
 	.el-table__footer-wrapper, .el-table__header-wrapper table thead tr th{
-		background: #EBEEF3;
+		_background: #EBEEF3;
 	}
 	.el-table table {
 		border-collapse:collapse;

@@ -49,7 +49,7 @@
                         <el-upload
                             action="https://jsonplaceholder.typicode.com/posts/"
                             list-type="picture-card"
-                            :file-list="fileList1"
+                            :file-list="form.fileList1"
                             :on-remove="handleRemove">
                             <i class="el-icon-plus"></i>
                         </el-upload>
@@ -61,7 +61,7 @@
                         <el-upload
                             action="https://jsonplaceholder.typicode.com/posts/"
                             list-type="picture-card"
-                            :file-list="fileList2"
+                            :file-list="form.fileList2"
                             :on-remove="handleRemove">
                             <i class="el-icon-plus"></i>
                         </el-upload>
@@ -75,11 +75,26 @@
                             ref="upload3"
                             action="https://jsonplaceholder.typicode.com/posts/"
                             :on-remove="handleRemove"
-                            :file-list="fileList3">
+                            :file-list="form.fileList3">
                             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
                         </el-upload>
                     </el-form-item>
+                </el-tab-pane>
+                <el-tab-pane label="产品规格">
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <el-select v-model="skuType" placeholder="">
+                                <el-option 
+                                v-for="(item, index) in skuTypeArr" 
+                                :key="index" 
+                                :label="item.label" 
+                                :value="item.value"></el-option>
+                            </el-select>
+                        </el-col>
+                        <el-col :span="6"></el-col>
+                        <el-col :span="6"></el-col>
+                    </el-row>
                 </el-tab-pane>
             </el-tabs>
         </el-form>      
@@ -91,19 +106,19 @@
 </template>
 <script>
 export default {
-    props: {
-        addProductDialog: {
-            type: Number,
-            required: true
-        }
-    },
     data(){
         return{            
-            dialogFormVisible: false,
+            dialogFormVisible: true,
             formLabelWidth: '80px',
             width2: '130px',
             dialogImageUrl: '',
             dialogVisible: false,
+            skuType: 'subType1',
+            skuTypeArr: [
+                {"label": "规格1", "value":"subType1"},
+                {"label": "规格2", "value":"subType2"},
+                {"label": "规格3", "value":"subType3"}
+            ],
             form: {
                 name: '',
                 goodsPrice: '',
@@ -112,52 +127,44 @@ export default {
                 isTrial: '是',
                 sellingPpoint: '',
                 simpleDesc: '',
+                fileList1: [
+                    {
+                        name: 'food.jpeg', 
+                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                    }, 
+                    {
+                        name: 'food2.jpeg', 
+                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                    }
+                ],
+                fileList2: [
+                    {
+                        name: 'food.jpeg', 
+                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                    }, 
+                    {
+                        name: 'food2.jpeg', 
+                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                    }
+                ],
+                fileList3: [
+                    {
+                        name: 'food.jpeg', 
+                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                    }, 
+                    {
+                        name: 'food2.jpeg', 
+                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                    }
+                ],
             },
-            fileList1: [
-                {
-                    name: 'food.jpeg', 
-                    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-                }, 
-                {
-                    name: 'food2.jpeg', 
-                    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-                }
-            ],
-            fileList2: [
-                {
-                    name: 'food.jpeg', 
-                    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-                }, 
-                {
-                    name: 'food2.jpeg', 
-                    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-                }
-            ],
-            fileList3: [
-                {
-                    name: 'food.jpeg', 
-                    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-                }, 
-                {
-                    name: 'food2.jpeg', 
-                    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-                }
-            ],
-        }
-    },
-    watch: {
-        addProductDialog: {
-            handler(val){
-                console.log("aaa");
-                this.dialogFormVisible = true;
-            }
         }
     },
     methods: {
         cancelBtn(){
             //清空form表单
             this.$refs["form"].resetFields();
-            this.dialogFormVisible = false;
+            this.$emit("addProductResult",{"status": "cancel"});
         },
         submitBtn(){
             var _this = this;
@@ -180,7 +187,8 @@ export default {
                 }
             ]
             };
-            _this.$post('https://www.eecup.cn/chaomes/cms/goods/create', params).then((res) => {
+            _this.$post(_this.$urlHost+'/chaomes/cms/goods/create', params).then((res) => {
+                this.$emit("addProductResult",{"status": "success"});
                 console.log(res);
             })
         },
@@ -189,12 +197,31 @@ export default {
         },
         handlePreview(file) {
             console.log(file);
+        },
+        getGoodInfo(id){
+            var $that = this;
+            var url = this.$urlHost+"/chaomes/cms/goods/findInfo?id="+id;
+            this.$fetch(url).then((res) => {
+                if(res.code==200 && res.data){
+                    $that.form = res.data;
+                }else{
+                    $that.$alert("获取商品信息失败："+res.msg, '提示', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                        this.$message({
+                            type: 'error'
+                        });
+                        }
+                    });
+                }
+            })
         }
     },
     mounted(){
-        this.$fetch("https://www.eecup.cn/chaomes/cms/goods/findInfo?id=1").then((res) => {
-            console.log(res)
-        })
+        var id = this.$store.state.ProductModify.proInfo.id;
+        if(id){
+            this.getGoodInfo(id);
+        }
     }
 }
 </script>
