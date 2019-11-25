@@ -10,12 +10,12 @@
 				<el-button size="small" icon="el-icon-refresh" class="blue">刷新</el-button>
 			</div>
 		</div>
-    <el-divider class="el-divider-margin"></el-divider>
+    <el-divider class="mg-t-10"></el-divider>
     <div class="pd-30" v-loading="loading">
         <div class="fontN">
-          <el-button type="primary" size="small">添加用户</el-button>
-          <el-button type="primary" size="small">删除用户</el-button>
-          <el-button type="primary" size="small">修改用户</el-button>
+          <el-button type="primary" size="small">添加产品</el-button>
+          <el-button type="primary" size="small">设置上架</el-button>
+          <el-button type="primary" size="small">删除产品</el-button>
 					<el-table :data="listData" border style="width: 100%">
             <el-table-column type="selection" width="55">
             </el-table-column>
@@ -78,6 +78,6 @@
   }
 
 </script>
-<style rel="stylesheet" scoped>
-@import '../../../../assets/css/common.css'; /*引入公共样式*/
+<style scoped>
+
 </style>

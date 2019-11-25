@@ -10,10 +10,10 @@
 				<el-button size="small" icon="el-icon-refresh" class="blue">刷新</el-button>
 			</div>
 		</div>
-    <el-divider class="el-divider-margin"></el-divider>
+    <el-divider class="mg-t-10"></el-divider>
     <div class="pd-30" v-loading="loading">
         <div class="fontN">
-          <el-button type="primary" size="small" @click="addProduct">添加产品</el-button>
+          <el-button type="primary" size="small" @click="dialogFormVisible = true">添加产品</el-button>
           <el-button type="primary" size="small">设置上架</el-button>
           <el-button type="primary" size="small">删除产品</el-button>
 					<el-table :data="listData" border style="width: 100%">
@@ -45,16 +45,49 @@
       <el-pagination @size-change="handleSizeChange" :current-page="currentpage" @current-change="handleCurrentChange" :page-sizes="$pagingArr" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total_count">
       </el-pagination>
     </div>
-    <AddProduct @addProductResult="addProductResult" :addProductDialog="addProductDialog"></AddProduct>
+    <el-dialog title="添加产品" :visible.sync="dialogFormVisible">
+        <el-tabs tab-position="left" >
+        <el-tab-pane label="基本信息">
+          <el-form :model="form">
+            <el-form-item label="产品名称" :label-width="formLabelWidth">
+              <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="产品图片" :label-width="formLabelWidth">
+              <el-upload
+                class="upload-demo"
+                ref="upload"
+                action="https://jsonplaceholder.typicode.com/posts/"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :file-list="fileList"
+                :auto-upload="false">
+                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
+              </el-upload>
+            </el-form-item>
+            <el-form-item label="活动区域" :label-width="formLabelWidth">
+              <el-select v-model="form.region" placeholder="请选择活动区域">
+                <el-option label="区域一" value="shanghai"></el-option>
+                <el-option label="区域二" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="详细介绍">
+          
+        </el-tab-pane>
+      </el-tabs>
+      
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import AddProduct from "@/pages/home/children/product/addProduct"
   export default {
-    components: {
-      AddProduct
-    },
     data () {
       return {
         loading: false,
@@ -62,16 +95,22 @@
 				listData:[],
         currentpage: 1,
         total_count: 10,
-        addProductDialog: 0
+        dialogFormVisible: false,
+        formLabelWidth: '120px',
+         form: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        fileList: []
       };
     },
     methods: {
-      addProduct(){
-        this.addProductDialog = new Date().getTime();
-      },
-      addProductResult(obj){
-
-      },
       handleCurrentChange(val) {
 				let that = this
 				that.currentpage = val
@@ -85,10 +124,20 @@
       },
       requestList(){
         return
+      },
+      submitUpload() {
+        this.$refs.upload.submit();
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
       }
     }
   }
+
 </script>
-<style rel="stylesheet" scoped>
-@import '../../../../assets/css/common.css'; /*引入公共样式*/
+<style scoped>
+
 </style>

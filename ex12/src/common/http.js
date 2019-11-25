@@ -19,10 +19,9 @@ axios.interceptors.request.use(
         'Content-Type': 'multipart/form-data',
       }
     } else {
-      // config.data = qs.stringify(config.data);
+      config.data = qs.stringify(config.data);
       config.headers = {
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json'
       }
     }
