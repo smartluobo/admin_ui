@@ -81,9 +81,13 @@
         this.$store.dispatch('updateProInfo', {"id": ""});
       },
       addProductResult(obj){
-        console.log(obj);
         if(obj.status != "fail"){
           this.addFlag = false;
+        }else{
+          this.addFlag = true;
+        }
+        if(obj.status == "success"){
+          this.getLists();
         }
       },
       deleteProduct(){
@@ -103,12 +107,7 @@
                 $that.getLists();
               }else{
                 $that.$alert('删除失败：'+res.msg, '提示', {
-                  confirmButtonText: '确定',
-                  callback: action => {
-                    this.$message({
-                      type: 'error'
-                    });
-                  }
+                  confirmButtonText: '确定'
                 });
               }
             })
@@ -131,12 +130,7 @@
               $that.getLists();
             }else{
               $that.$alert('更新失败：'+res.msg, '提示', {
-                confirmButtonText: '确定',
-                callback: action => {
-                  this.$message({
-                    type: 'error'
-                  });
-                }
+                confirmButtonText: '确定'
               });
             }
           })
@@ -163,14 +157,10 @@
           this.$post(url,params).then((res) => {
             if(res.list){
                 $that.listData = res.list;
+					      $that.total_count = res.total;
             }else{
               $that.$alert(res.msg, '提示', {
-                confirmButtonText: '确定',
-                callback: action => {
-                  this.$message({
-                    type: 'error'
-                  });
-                }
+                confirmButtonText: '确定'
               });
             }
           })

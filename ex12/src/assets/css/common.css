@@ -16,3 +16,31 @@ margin-top: 10px;
 .red{
     color: #f00;
 }
+.customDialog >>> .el-dialog__body{
+    padding: 10px;
+}
+.customDialog >>> .el-input__inner{
+    height: 30px;
+}
+.customDialog >>> .el-table td{
+    padding: 0;
+}
+.customDialog >>> .el-table th{
+    padding: 8px 0;
+    background: #EBEEF5;
+}
+.customDialog >>> .el-form-item{
+    margin-bottom: 0;
+}
+.customDialog >>> .el-form-item__error{
+    position: relative;
+}
+.el-button{
+    padding: 8px 10px;
+}
+.customDialog >>> .el-table::before{
+    height: 0;
+}
+.discount >>> .el-form-item{
+    width: 48%;
+}

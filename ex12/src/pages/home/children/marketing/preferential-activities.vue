@@ -7,74 +7,142 @@
 				</div>
 			</div>
 			<div class="pd-r-20">
-				<el-button size="small" icon="el-icon-refresh" class="blue">刷新</el-button>
+				<el-button size="small" icon="el-icon-refresh" class="blue" @click="requestList">刷新</el-button>
 			</div>
 		</div>
     <el-divider class="el-divider-margin"></el-divider>
     <div class="pd-30" v-loading="loading">
         <div class="fontN">
-          <el-button type="primary" size="small">添加产品</el-button>
-          <el-button type="primary" size="small">设置上架</el-button>
-          <el-button type="primary" size="small">删除产品</el-button>
-					<el-table :data="listData" border style="width: 100%">
-            <el-table-column type="selection" width="55">
-            </el-table-column>
-            <el-table-column fixed label="操作" width="100">
-              <template slot-scope="scope">
-                <el-button type="text" size="small">编辑</el-button>
-              </template>
-            </el-table-column>
-						<el-table-column prop="id" label="产品名称">
-						</el-table-column>
-						<el-table-column prop="nickname" label="分类名称">
-							<template slot-scope="scope"><span>{{ scope.row.nickname }}</span></template>
-						</el-table-column>
-						<el-table-column prop="mobile" label="录入时间">
-						</el-table-column>
-						<el-table-column prop="mobile" label="上架">
-						</el-table-column>
-						<el-table-column prop="mobile" label="标签">
-						</el-table-column>
-						<el-table-column prop="zhimacreditstate" label="备注">
-							<template slot-scope="scope">{{ scope.row.zhimacreditstate == 2 ? '授权通过' : (scope.row.zhimacreditstate == 1 ? '授权中' : '未授权') }}</template>
-						</el-table-column>
-					</el-table>
-				</div>
-    </div>
-    <div class="block fcc mg-t-40">
-					<el-pagination @size-change="handleSizeChange" :current-page="currentpage" @current-change="handleCurrentChange" :page-sizes="$pagingArr" :page-size="pagesize" layout="total, sizes, prev, pager, next, jumper" :total="total_count">
-					</el-pagination>
-				</div>
-  </div>
+			<el-button type="primary" size="small" @click="addDisCount">新增优惠券</el-button>
+				<el-table :data="listData" border style="width: 100%">
+					<el-table-column type="selection" width="55">
+					</el-table-column>
+					<el-table-column fixed label="操作" width="100">
+					<template slot-scope="scope">
+						<el-button type="text" size="small" @click="delActivity">删除</el-button>
+						<el-button type="text" size="small" @click="modifyActivity">编辑</el-button>
+					</template>
+					</el-table-column>
+					<el-table-column prop="id" label="活动名称">
+					</el-table-column>
+					<el-table-column prop="nickname" label="使用条件">
+						<template slot-scope="scope"></template>
+					</el-table-column>
+					<el-table-column prop="mobile" label="活动时间">
+					</el-table-column>
+					<el-table-column prop="mobile" label="剩余券数">
+					</el-table-column>
+					<el-table-column prop="mobile" label="已领券数">
+					</el-table-column>
+					<el-table-column prop="zhimacreditstate" label="活动状态">
+					</el-table-column>
+				</el-table>
+			</div>
+		</div>
+		<div class="block fcc mg-t-40">
+			<el-pagination 
+			@size-change="handleSizeChange" 
+			:current-page="currentpage" 
+			@current-change="handleCurrentChange" 
+			:page-sizes="$pagingArr" 
+			:page-size="pagesize" 
+			layout="total, sizes, prev, pager, next, jumper" 
+			:total="total_count">
+			</el-pagination>
+		</div>
+		<AddDiscount v-if="discountFlag" :discountData="discountData" @addActivityResult="addActivityResult"></AddDiscount>
+  	</div>
 </template>
 
 <script>
+  import AddDiscount from "@/pages/home/children/marketing/addDiscount"
   export default {
+    components: {
+      AddDiscount
+    },
     data () {
       return {
         loading: false,
         pagesize: 10,
-				listData:[],
+		listData:[],
         currentpage: 1,
-				total_count: 10,
+		total_count: 10,
+		listData:[],
+		discountFlag: false,
+		discountData: {}
       };
     },
     methods: {
-      handleCurrentChange(val) {
-				let that = this
-				that.currentpage = val
-				that.requestList()
-      },
-      handleSizeChange(val) {
-				let that = this
-				that.pagesize = val
-				that.currentpage = 1
-				that.requestList()
-      },
-      requestList(){
-        return
-      }
-    }
+		addDisCount(){
+			this.discountFlag = true;
+			this.discountData.type = "add";
+		},
+		modifyActivity(row){
+			this.discountData.type = "modify";
+			this.discountData.data = row;
+			this.discountFlag = true;
+		},
+		delActivity(row){
+			var url = this.$urlHost+"/chaomes/cms/activity/delete?id="+row.id;
+			this.$post(url).then((res) => {
+				if(res.code == 200 && res.msg=="success"){
+					this.requestList();
+					$that.$alert("删除成功！", '提示', {
+						confirmButtonText: '确定'
+					});
+				}else{
+					$that.$alert("删除失败："+res.msg, '提示', {
+						confirmButtonText: '确定'
+					});
+				}
+			})
+		},
+		handleCurrentChange(val) {
+			let that = this
+			that.currentpage = val
+			that.requestList()
+		},
+		handleSizeChange(val) {
+			let that = this
+			that.pagesize = val
+			that.currentpage = 1
+			that.requestList()
+		},
+		requestList(){
+			var $that = this;
+			var url = this.$urlHost+"/chaomes/cms/activity/findPage";
+			var params = {
+				"pageNum": this.pagesize, // 页码
+				"pageSize": this.pagesize, // 显示条数
+				"condition": {
+					"activityName": "全场折扣"
+				}
+			};
+			this.$post(url,params).then((res) => {
+				if(res.list){
+					$that.listData = res.list;
+					$that.total_count = res.total;
+				}else{
+				$that.$alert(res.msg, '提示', {
+					confirmButtonText: '确定'
+				});
+				}
+			})
+		},
+		addActivityResult(obj){
+			if(obj.status != "fail"){
+				this.discountFlag = false;
+			}else{
+				this.discountFlag = true;
+			}
+			if(obj.status == "success"){
+				this.requestList();
+			}
+		}
+	},
+	mounted(){
+		this.requestList();
+	}
   }
 
 </script>

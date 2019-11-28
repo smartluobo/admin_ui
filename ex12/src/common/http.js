@@ -7,7 +7,7 @@ import Router from '../router'
 import Vue from 'vue';
 
 axios.defaults.baseURL = getUrl('');
-axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = false;
 
 
 //http request 拦截器
@@ -16,14 +16,15 @@ axios.interceptors.request.use(
 
     if (Cookies.get('isUploadImg')) {
       config.headers = {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data'
       }
     } else {
       // config.data = qs.stringify(config.data);
       config.headers = {
         // 'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     }
 
