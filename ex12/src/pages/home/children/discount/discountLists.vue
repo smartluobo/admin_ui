@@ -84,7 +84,7 @@
 		},
 		delActivity(row){
 			var $that = this;
-			var url = this.$urlHost+"/chaomes/cms/activity/delete?id="+row.id;
+			var url = this.$urlHost+"/chaomes/cms/coupons/delete?id="+row.id;
 			this.$post(url).then((res) => {
 				if(res.code == 200 && res.msg=="success"){
 					this.requestList();
@@ -116,7 +116,7 @@
 				"pageNum": this.currentpage, // 页码
 				"pageSize": this.pagesize, // 显示条数
 				"condition": {
-					"activityName": "全场折扣"
+					"couponsName": "满100元减10元"
 				}
 			};
 			this.$post(url,params).then((res) => {

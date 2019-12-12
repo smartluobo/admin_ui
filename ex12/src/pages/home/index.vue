@@ -37,6 +37,7 @@
                 </template>
                 <el-menu-item-group>
                     <el-menu-item index="marketing/preferential-activities" >优惠活动</el-menu-item>
+                    <el-menu-item index="discount/discountLists" >优惠券</el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
         </el-menu>
@@ -74,6 +75,8 @@
 				this.active = 'member/backstage-admin'
 			} else if(router == '/home/children/marketing/preferential-activities') {
 				this.active = 'marketing/preferential-activities'
+			} else if(router == '/home/children/discount/discountLists') {
+				this.active = 'discount/discountLists'
 			};
 			
 		}

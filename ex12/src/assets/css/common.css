@@ -42,5 +42,19 @@ margin-top: 10px;
     height: 0;
 }
 .discount >>> .el-form-item{
-    width: 48%;
+    width: 100%;
+}
+.discount >>> .el-upload-list--picture-card .el-upload-list__item,
+.discount >>> .el-upload--picture-card{
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+}
+.discount >>> .el-upload-list,
+.discount >>> .el-upload--picture-card{
+    display: inline-block;
+    vertical-align: top;
+}
+.discount >>> .el-form-item__content{
+    width: calc(100% - 80px);
 }

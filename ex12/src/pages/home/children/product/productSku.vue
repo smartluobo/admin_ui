@@ -7,7 +7,7 @@
             <el-checkbox
             v-for="(items, indexs) in item.skuDetailList" 
             :key="indexs"
-            :value="items.isSelect==1?true:false"
+            :value="items.isSelect=='1'?true:false"
             @change="checked=>skuChoose(checked, items)">
                 {{items.skuDetailName}}
             </el-checkbox>
@@ -22,6 +22,16 @@ export default {
     components: {
       ManageSku
     },
+    props:{
+        skuTypeList: {}
+    },
+    watch:{
+        skuTypeList:{
+            handler(val){
+                this.skuTypeGet();
+            }
+        }
+    },
     data(){
         return {
             manageFlag: false,
@@ -33,25 +43,19 @@ export default {
     },
     methods:{
         skuTypeGet(){
-            var $that = this;
-            var url = this.$urlHost+"/chaomes/cms/sku/findTypeList";
-            this.$post(url,{}).then((res) => {
-                if(res.code==200 && res.data){
-                    $that.skuTypeArr = res.data;
-                }else{
-                    $that.$alert("获取商品规格类型相关信息失败："+res.msg, '提示', {
-                        confirmButtonText: '确定'
-                    });
-                }
-            })
+            this.skuTypeArr = this.skuTypeList?this.skuTypeList:[];
         },
         skuChoose(val,items){
-            if(val){
-                items.isSelect = 1;
+            if(items.isSelectFlag){
+                if(val){
+                    items.isSelect = 1;
+                }else{
+                    items.isSelect = 0;
+                }
+                this.$emit("skuTypeResult",this.skuTypeArr);
             }else{
-                items.isSelect = 0;
+               items.isSelectFlag = true; 
             }
-            this.$emit("skuTypeResult",this.skuTypeArr);
         },
         typeManage(){
             this.manageFlag = true;

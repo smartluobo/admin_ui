@@ -11,6 +11,8 @@ import userAdmin from '@/pages/home/children/member/user-admin'
 import backstageAdmin from '@/pages/home/children/member/backstage-admin'
 //营销
 import preferentialActivities from '@/pages/home/children/marketing/preferential-activities'
+//营销
+import discountLists from '@/pages/home/children/discount/discountLists'
 
 Vue.use(Router)
 
@@ -51,6 +53,11 @@ export default new Router({
 					path:'children/marketing/preferential-activities',
 					name:'preferential-activities',
 					component:preferentialActivities
+				},
+				{
+					path:'children/discount/discountLists',
+					name:'discount',
+					component:discountLists
 				}
 				]
     }

@@ -99,7 +99,7 @@
                     </el-form-item>
                 </el-tab-pane>
                 <el-tab-pane label="产品规格">
-                    <productSku @skuTypeResult="skuTypeResult"></productSku>
+                    <productSku @skuTypeResult="skuTypeResult" :skuTypeList="skuTypeList"></productSku>
                 </el-tab-pane>
             </el-tabs>
         </el-form>      
@@ -132,8 +132,9 @@ export default {
                 simpleDesc: '',
                 fileList1: [],
                 fileList2: [],
-                fileList3: [],
+                fileList3: []
             },
+            skuTypeList: [],
             skuTypeLists: []
         }
     },
@@ -237,7 +238,10 @@ export default {
             var url = this.$urlHost+"/chaomes/cms/goods/findInfo?id="+id;
             this.$fetch(url).then((res) => {
                 if(res.code==200 && res.data){
-                    $that.form = res.data;
+                    for(var name in res.data){
+                        $that.form[name] = res.data[name];
+                    }
+                    $that.skuTypeList = res.data["skuTypeList"];
                     $that.defaultData();
                 }else{
                     $that.$alert("获取商品信息失败："+res.msg, '提示', {
@@ -255,12 +259,14 @@ export default {
             var obj = {
                 url: data
             };
+            this.form.fileList2 = this.form.fileList2?this.form.fileList2:[];
             this.form.fileList2.push(obj)
         },
         productImg3(data){//商品详情
             var obj = {
                 url: data
             };
+            this.form.fileList3 = this.form.fileList3?this.form.fileList3:[];
             this.form.fileList3.push(obj)
         },
         handleRemove1(file, fileList) {

@@ -5,8 +5,8 @@
     :close-on-click-modal="false" 
     :close-on-press-escape="false"
     :before-close="dialogClose"
-    width="70%">
-        <el-form :model="form" ref="form" :inline="true" class="discount">
+    width="600px">
+        <el-form :model="form" ref="form" class="discount">
             <el-form-item 
             label="活动名称" 
             :label-width="formLabelWidth" 
@@ -65,7 +65,7 @@
             <el-form-item label="商品详情图片" :label-width="width2" class="line">
                         <el-upload
                             :action="$urlHost+'/chaomes/cms/image/upload'"
-                            :limit="1"
+                            :limit="10"
                             list-type="picture-card"
                             :file-list="form.fileList"
                             :on-success="productImg"
@@ -98,7 +98,7 @@ export default {
             formLabelWidth: "80px",
             dialogImageUrl: '',
             dialogVisible: false,
-            width2: '130px',
+            width2: '100px',
             form: {
                 "activityName": "全场折扣",
                 "activityType": "全场折扣",
@@ -145,7 +145,7 @@ export default {
                 "endDate": this.form.date[1],
                 "startHour": new Date(this.form.hour[0]).getHours(),
                 "endHour": new Date(this.form.hour[1]).getHours(),
-                "activityPoster": this.form.fileList[0]["url"],
+                "activityPoster": this.form.fileList[0]&&this.form.fileList[0]["url"]?this.form.fileList[0]["url"]:"",
                 "createTime": null,
                 "updateTime": null,
                 "activityRatio": this.form.activityRatio,
@@ -154,9 +154,9 @@ export default {
             };
             var url = "";
             if(this.discountData.type == "modify"){
-                url = _this.$urlHost+'/chaomes/cms/activity/create';
+                url = _this.$urlHost+'/chaomes/cms/activity/update';
             }else{
-                url = _this.$urlHost+'/chaomes/cms/activity/update'
+                url = _this.$urlHost+'/chaomes/cms/activity/create'
             }
             this.$refs["form"].validate((valid) => {
                 if (valid) {
