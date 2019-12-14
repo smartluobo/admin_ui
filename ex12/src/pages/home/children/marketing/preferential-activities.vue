@@ -13,11 +13,11 @@
     <el-divider class="el-divider-margin"></el-divider>
     <div class="pd-30" v-loading="loading">
         <div class="fontN">
-			<el-button type="primary" size="small" @click="addDisCount">新增优惠券</el-button>
+			<el-button type="primary" size="small" @click="addDisCount">新增活动</el-button>
 				<el-table :data="listData" border style="width: 100%">
 					<el-table-column type="selection" width="55">
 					</el-table-column>
-					<el-table-column fixed label="操作" width="100">
+					<el-table-column fixed label="操作" width="140">
 					<template slot-scope="scope">
 						<el-button type="text" size="small" @click="delActivity(scope.row)">删除</el-button>
 						<el-button type="text" size="small" @click="modifyActivity(scope.row)">编辑</el-button>
@@ -76,9 +76,11 @@
 		addDisCount(){
 			this.discountFlag = true;
 			this.discountData.type = "add";
+			this.discountData.activityType = "activity";
 		},
 		modifyActivity(row){
 			this.discountData.type = "modify";
+			this.discountData.activityType = "activity";
 			this.discountData.data = row;
 			this.discountFlag = true;
 		},

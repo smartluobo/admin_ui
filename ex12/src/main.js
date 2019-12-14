@@ -6,9 +6,10 @@ import store from './store';//引入store
 import ElementUI from 'element-ui';
 import { Loading } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import './assets/css/common.css'; /*引入公共样式*/
 import router from './router';
-import axios from 'axios'
-import {post,fetch,patch,put,WebSocketConnect} from './common/http'
+import axios from 'axios';
+import {post,fetch,patch,put,WebSocketConnect} from './common/http';
 Vue.prototype.$openLoading = function() {
   const loading = this.$loading({           // 声明一个loading对象
     lock: true,                             // 是否锁屏

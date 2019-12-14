@@ -58,3 +58,76 @@ margin-top: 10px;
 .discount >>> .el-form-item__content{
     width: calc(100% - 80px);
 }
+.discountPro li{
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    overflow: hidden;
+    background-color: #fff;
+    border: 1px solid #c0ccda;
+    border-radius: 6px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0 8px 8px 0;
+    display: inline-block;
+}
+.discountPro li.addProductBtn{
+    vertical-align: top;
+    background-color: #fbfdff;
+    border: 1px dashed #c0ccda;
+    border-radius: 6px;
+    font-family: element-icons!important;
+    speak: none;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 80px;
+    vertical-align: baseline;
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    font-size: 34px;
+    cursor: pointer;
+}
+.discountPro li.addProductBtn:hover{
+    border-color: #409EFF;
+    color: #409EFF;
+}
+/* 表单样式 */
+.el-form-item__content,
+.el-form-item__label,
+.el-form-item__content .el-input__inner,
+.el-form-item__content .el-input__icon{
+    height: 30px;
+    line-height: 30px;
+}
+.el-form--inline .el-form-item{
+    margin-bottom: 10px;
+}
+.el-select{
+    width: 100%;
+}
+.el-date-editor .el-range-separator{
+    line-height: 20px;
+}
+/* 下拉 */
+.el-select-dropdown__item{
+    height: 24px;
+    line-height: 24px;
+}
+/* 弹窗 */
+.el-dialog__body{
+    padding: 10px 15px;
+}
+.el-dialog__header {
+    padding: 10px 15px;
+}
+.el-dialog__headerbtn{
+    top: 10px;
+}
+.el-dialog__footer{
+    position: relative;
+    z-index: 2;
+}

@@ -17,7 +17,7 @@
 				<el-table :data="listData" border style="width: 100%">
 					<el-table-column type="selection" width="55">
 					</el-table-column>
-					<el-table-column fixed label="操作" width="100">
+					<el-table-column fixed label="操作" width="140">
 					<template slot-scope="scope">
 						<el-button type="text" size="small" @click="delActivity(scope.row)">删除</el-button>
 						<el-button type="text" size="small" @click="modifyActivity(scope.row)">编辑</el-button>
@@ -76,9 +76,11 @@
 		addDisCount(){
 			this.discountFlag = true;
 			this.discountData.type = "add";
+			this.discountData.activityType = "discount";
 		},
 		modifyActivity(row){
 			this.discountData.type = "modify";
+			this.discountData.activityType = "discount";
 			this.discountData.data = row;
 			this.discountFlag = true;
 		},
