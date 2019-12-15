@@ -106,6 +106,13 @@ margin-top: 10px;
 .el-form--inline .el-form-item{
     margin-bottom: 10px;
 }
+.el-table__body .el-form-item{
+    margin-bottom: 0;
+}
+.el-date-editor--daterange.el-input, 
+.el-date-editor--daterange.el-input__inner, 
+.el-date-editor--timerange.el-input, 
+.el-date-editor--timerange.el-input__inner,
 .el-select{
     width: 100%;
 }
@@ -130,4 +137,8 @@ margin-top: 10px;
 .el-dialog__footer{
     position: relative;
     z-index: 2;
+}
+/* 表格 */
+.el-table__row .el-button{
+    padding: 8px 0;
 }

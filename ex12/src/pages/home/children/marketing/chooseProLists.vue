@@ -5,8 +5,8 @@
             v-for="(item,index) in  lists" 
             :key="item.id"
             @click="choosePro(item)">
-                <img v-bind:src="item.imgUrl" alt="" />
-                <span v-show="item.choose">已参加其他活动</span>
+                <img v-bind:src="item.goodsPoster" alt="" />
+                <span v-show="item.choose">已参加活动</span>
             </div>
         </div>
 		<div class="block fcc mg-t-40">
@@ -45,12 +45,7 @@ export default {
     data(){
         return {
             lists: [//当前页产品列表
-                {'id':'1', 'imgUrl': '', 'choose': false},
-                {'id':'2', 'imgUrl': '', 'choose': false},
-                {'id':'3', 'imgUrl': '', 'choose': false},
-                {'id':'4', 'imgUrl': '', 'choose': false},
-                {'id':'5', 'imgUrl': '', 'choose': false},
-                {'id':'6', 'imgUrl': '', 'choose': false}
+                // {'id':'1', 'imgUrl': '', 'choose': false},
             ],
             chooseLists: [],//已选产品列表
             currentpage: 1,
@@ -58,13 +53,36 @@ export default {
             total_count: 10,
         }
     },
-    methods: {        
+    methods: {   
+        productList(){//产品列表获取
+            var $that = this;
+            var url = this.$urlHost+"/chaomes/cms/goods/findPage?pageNum="+
+            $that.currentpage+"&pageSize="+$that.pagesize;
+            var params = {
+                goodsName: ''
+            };
+            this.$post(url,params).then((res) => {
+                if(res.list){
+                    res.list.forEach(function(item,i){
+                        item.choose = false;
+                    });
+                    $that.lists = res.list;
+                    $that.total_count = res.total;
+                }else{
+                    $that.$alert(res.msg, '提示', {
+                        confirmButtonText: '确定'
+                    });
+                }
+            })
+        },     
 		handleCurrentChange(val) {
-			that.currentpage = val
+            that.currentpage = val
+            this.productList();
 		},
 		handleSizeChange(val) {
 			that.pagesize = val
-			that.currentpage = 1
+            that.currentpage = 1
+            this.productList();
         },
         choosePro(pro){
             var chooseLists = JSON.parse(JSON.stringify(this.chooseLists))
@@ -126,7 +144,9 @@ export default {
             this.$emit("chooseProduct",this.chooseLists);
         }
     },
-    mounted(){}
+    mounted(){
+        this.productList();
+    }
 }
 </script>
 <style scoped>

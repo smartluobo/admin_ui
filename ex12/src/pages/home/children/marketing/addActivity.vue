@@ -65,6 +65,9 @@
             </el-form-item>
             <el-form-item label="活动商品" v-if="form.activityType=='1'||form.activityType=='限时折扣'">
                 <ul class="discountPro">
+                    <li v-for="(item, indexs) in form.goodsList">
+                        <img v-bind:src="item.goodsPoster?$urlHost+'/chaomes/image/'+item.goodsPoster:item.goodsPoster" alt="" />
+                    </li>
                     <li class="addProductBtn el-icon-plus" @click="addProducFn"></li>
                 </ul>
             </el-form-item>
@@ -109,12 +112,12 @@ export default {
                 "startHour": 14,
                 "endHour": 24,
                 "activityPoster": null,
-                "fileList": [],
                 "createTime": null,
                 "updateTime": null,
                 "activityRatio": "0.88",
                 "cmsUserId": 0,
-                "cmsUserName": null
+                "cmsUserName": null,
+                "goodsList": []
             },
             activity: {
                 "0": "全场折扣",
@@ -141,27 +144,20 @@ export default {
                 "endDate": this.form.date[1],
                 "startHour": new Date(this.form.hour[0]).getHours(),
                 "endHour": new Date(this.form.hour[1]).getHours(),
-                "activityPoster": this.form.fileList && this.form.fileList[0] && this.form.fileList[0]["url"]?this.form.fileList[0]["url"]:"",
+                "activityPoster": this.goodsList,
                 "createTime": null,
                 "updateTime": null,
                 "activityRatio": this.form.activityRatio,
                 "cmsUserId": 0,
-                "cmsUserName": null
+                "cmsUserName": null,
+                "goodsList": this.form.goodsList
             };
             var url = "";
             if(this.discountData.type == "modify"){
                 params.id = this.discountData.data.id;
-                if(this.discountData.activityType=="activity"){
-                    url = _this.$urlHost+'/chaomes/cms/activity/update';
-                }else if(this.discountData.activityType=="discount"){
-                    url = _this.$urlHost+'/chaomes/cms/coupons/update';
-                }                
+                url = _this.$urlHost+'/chaomes/cms/activity/update';             
             }else{
-                if(this.discountData.activityType=="activity"){
-                    url = _this.$urlHost+'/chaomes/cms/activity/create'
-                }else if(this.discountData.activityType=="discount"){
-                    url = _this.$urlHost+'/chaomes/cms/coupons/create';
-                }
+                url = _this.$urlHost+'/chaomes/cms/activity/create'
             }
             // console.log(params,url);
             // return false;
@@ -191,11 +187,7 @@ export default {
             if(this.discountData.type == "modify" && this.discountData.data){
                 var id = this.discountData.data.id;
                 var url = '';
-                if(this.discountData.activityType=="activity"){
-                    url = '/chaomes/cms/activity/findInfo?id='
-                }else if(this.discountData.activityType=="discount"){
-                    url = '/chaomes/cms/coupons/findInfo?id=';
-                }
+                url = '/chaomes/cms/activity/findInfo?id='
                 this.$fetch(_this.$urlHost+ url + id).then((res) => {
                     if(res.code == 200){
                         _this.form = JSON.parse(JSON.stringify(res.data));
@@ -208,6 +200,7 @@ export default {
                         hour.push(_this.timeSet(res.data.endHour,"end"));
                         _this.form.date = date;
                         _this.form.hour = hour;
+                        _this.form.goodsList = JSON.parse(JSON.stringify(res.data.goodsList));
                     }else{
                         _this.$alert('获取活动详情数据失败：'+res.msg, '提示', {
                             confirmButtonText: '确定'
@@ -236,25 +229,27 @@ export default {
             this.addProVisible = true;
         },
         addProLists(obj){//新增产品结果
-            console.log(obj);
             this.addProVisible = false;
+            // var lists = [];
+            // if(obj && obj != "cancel" && obj.length>0){
+            //     obj.forEach(function(item,i){
+            //         var pro = {};
+            //         pro.id = item.id?item.id:'';
+            //         pro.goodsName = item.goodsName?item.goodsName:'';
+            //         pro.goodsPrice = item.goodsPrice?item.goodsPrice:'';
+            //         lists.push(pro);
+            //     });
+            // }
+            this.form.goodsList = JSON.parse(JSON.stringify(obj));
         }
     },
     mounted(){
         // console.log(this.discountData);
         if(this.discountData.type == "modify"){
-            if(this.discountData.activityType == 'activity'){
-                this.title = "修改活动";
-            }else if(this.discountData.activityType == 'discount'){
-                this.title = "修改优惠券";
-            }
+            this.title = "修改活动";
             this.getActivityDetail();
         }else if(this.discountData.type == "add"){
-            if(this.discountData.activityType == 'activity'){
-                this.title = "新增活动";
-            }else if(this.discountData.activityType == 'discount'){
-                this.title = "新增优惠券";
-            }
+            this.title = "新增活动";
             this.form.activityType = this.activity[this.form.activityType];
         }
         // console.log(this.title);

@@ -23,7 +23,7 @@
 						<el-button type="text" size="small" @click="modifyActivity(scope.row)">编辑</el-button>
 					</template>
 					</el-table-column>
-					<el-table-column prop="id" label="活动名称">
+					<el-table-column prop="activityName" label="活动名称">
 					</el-table-column>
 					<el-table-column prop="nickname" label="使用条件">
 						<template slot-scope="scope"></template>
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-  import AddDiscount from "@/pages/home/children/marketing/addDiscount"
+  import AddDiscount from "@/pages/home/children/discount/addDiscount"
   export default {
     components: {
       AddDiscount
@@ -113,13 +113,10 @@
 		},
 		requestList(){
 			var $that = this;
-			var url = this.$urlHost+"/chaomes/cms/activity/findPage";
+			var url = this.$urlHost+"/chaomes/cms/coupons/findPage";
 			var params = {
 				"pageNum": this.currentpage, // 页码
 				"pageSize": this.pagesize, // 显示条数
-				"condition": {
-					"couponsName": "满100元减10元"
-				}
 			};
 			this.$post(url,params).then((res) => {
 				if(res.list){

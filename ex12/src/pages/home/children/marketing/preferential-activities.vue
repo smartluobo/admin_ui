@@ -23,7 +23,7 @@
 						<el-button type="text" size="small" @click="modifyActivity(scope.row)">编辑</el-button>
 					</template>
 					</el-table-column>
-					<el-table-column prop="id" label="活动名称">
+					<el-table-column prop="activityName" label="活动名称">
 					</el-table-column>
 					<el-table-column prop="nickname" label="使用条件">
 						<template slot-scope="scope"></template>
@@ -50,15 +50,15 @@
 			:total="total_count">
 			</el-pagination>
 		</div>
-		<AddDiscount v-if="discountFlag" :discountData="discountData" @addActivityResult="addActivityResult"></AddDiscount>
+		<AddActivity v-if="discountFlag" :discountData="discountData" @addActivityResult="addActivityResult"></AddActivity>
   	</div>
 </template>
 
 <script>
-  import AddDiscount from "@/pages/home/children/marketing/addDiscount"
+  import AddActivity from "@/pages/home/children/marketing/addActivity"
   export default {
     components: {
-      AddDiscount
+      AddActivity
     },
     data () {
       return {
@@ -117,9 +117,6 @@
 			var params = {
 				"pageNum": this.currentpage, // 页码
 				"pageSize": this.pagesize, // 显示条数
-				"condition": {
-					"activityName": "全场折扣"
-				}
 			};
 			this.$post(url,params).then((res) => {
 				if(res.list){

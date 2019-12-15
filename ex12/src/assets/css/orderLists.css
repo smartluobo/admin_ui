@@ -1,0 +1,40 @@
+.proLists{
+    margin: 0 -10px;
+}
+.proLists a{
+    display: block;
+    color: #333;
+    line-height: 30px;
+    border-bottom: 1px solid #dedede; 
+}
+.proLists a:last-child{
+    border-bottom: none;;
+}
+.fontN >>> tr td:nth-child(4){
+    border-right: none;
+}
+.statusLists{
+    margin-bottom: 20px;
+    border-bottom: 1px solid #dedede;
+}
+.statusLists a{
+    display: inline-block;
+    line-height: 32px;
+    padding: 0 8px;
+    border-bottom: 3px solid transparent;
+    font-size: 13px;
+    margin-right:  50px;
+}
+.statusLists a:hover{
+    color: #409EFF;
+}
+.statusLists a.active{
+    border-bottom: 3px solid #409EFF;
+}
+.title{
+    padding: 0 0 10px 0;
+    font-weight: bold;
+}
+.detailOrder .el-table{
+    margin-bottom: 10px;
+}

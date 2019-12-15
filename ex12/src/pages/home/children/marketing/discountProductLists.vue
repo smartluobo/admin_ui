@@ -91,7 +91,8 @@ export default {
             ],
             labelLists: [
                 {"label":"全部","value":"all"}
-            ]
+            ],
+            productLists: []
         }
     },
     methods:{
@@ -104,11 +105,12 @@ export default {
             this.$emit("addProLists","cancel");
         },
         submitBtn: function(){    
-            this.visible = false; 
-            this.$emit("addProLists","submit");
+            this.visible = false;
+            this.$emit("addProLists",this.productLists);
         },
         chooseProduct: function(val){
             console.log(val);
+            this.productLists = JSON.parse(JSON.stringify(val));
         }
     }
 }
